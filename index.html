@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Ahorro con Paneles Solares en México</title>
+    <title>Calculadora de Ahorro con Paneles Solares</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <div class="contenedor">
         <header>
-            <h1>Calculadora de Ahorro con Paneles Solares</h1>
+            <h1>¿Cuánto puedes ahorrar con paneles solares?</h1>
+            <p>Calcula tu ahorro en 3 simples pasos</p>
         </header>
 
-        <div class="contenedor-calculadora">
-            <div class="seccion-entrada">
-                <h2>Ingresa tus datos</h2>
-                <form id="formulario-solar">
-                    <div class="grupo-formulario">
-                        <label for="consumo">Consumo promedio mensual (kWh):</label>
-                        <input type="number" id="consumo" min="100" placeholder="Mínimo 100 kWh/mes" required>
-                        <small>Ingresa tu consumo promedio mensual del último año</small>
-                    </div>
-
+        <div class="pasos-container">
+            <div class="paso activo" id="paso-1">
+                <div class="numero-paso">1</div>
+                <div class="contenido-paso">
+                    <h2>¿Dónde te encuentras?</h2>
+                    <p class="instruccion">Selecciona tu estado para calcular la energía solar disponible en tu región</p>
+                    
                     <div class="grupo-formulario">
                         <label for="estado">Estado de la República:</label>
                         <select id="estado" required>
@@ -60,57 +60,231 @@
                             <option value="cdmx">Ciudad de México</option>
                         </select>
                     </div>
-
-                    <div class="grupo-formulario">
-                        <label for="tarifa">Tarifa CFE:</label>
-                        <select id="tarifa" required>
-                            <option value="" disabled selected>Selecciona tu tarifa</option>
-                            <option value="1">Tarifa 1</option>
-                            <option value="1A">Tarifa 1A</option>
-                            <option value="1B">Tarifa 1B</option>
-                            <option value="1C">Tarifa 1C</option>
-                            <option value="1D">Tarifa 1D</option>
-                            <option value="1E">Tarifa 1E</option>
-                            <option value="1F">Tarifa 1F</option>
-                            <option value="DAC">DAC (Alto Consumo)</option>
-                            <option value="PDBT">PDBT (Pequeña Demanda en Baja Tensión)</option>
-                            <option value="GDBT">GDBT (Gran Demanda en Baja Tensión)</option>
-                            <option value="RABT">RABT (Riego Agrícola en Baja Tensión)</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="boton-calcular">Calcular Ahorro</button>
-                </form>
+                    
+                    <button class="boton-siguiente" id="siguiente-1">Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
             </div>
 
-            <div class="seccion-resultados" id="resultados">
-                <h2>Resultados</h2>
-                <div class="contenedor-resultados oculto" id="contenedor-resultados">
-                    <div class="tarjeta-resultado">
-                        <div class="icono-resultado">💰</div>
-                        <h3>Ahorro estimado durante el 1er año</h3>
-                        <p id="ahorro-primer-anio">$0.00 MXN</p>
+            <div class="paso" id="paso-2">
+                <div class="numero-paso">2</div>
+                <div class="contenido-paso">
+                    <h2>Tu recibo de luz</h2>
+                    <p class="instruccion">Necesitamos algunos datos de tu recibo para calcular tu ahorro</p>
+                    
+                    <div class="grupo-formulario">
+                        <label for="metodo-entrada">¿Cómo prefieres ingresar tus datos?</label>
+                        <div class="opciones-entrada">
+                            <div class="opcion-entrada activa" id="opcion-manual">
+                                <div class="tab-header">Ingresar manualmente</div>
+                            </div>
+                            <div class="opcion-entrada" id="opcion-recibo">
+                                <div class="tab-header">Cargar mi recibo CFE</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="entrada-manual">
+                        <div class="grupo-formulario">
+                            <label for="tarifa">¿Qué tipo de tarifa tienes?</label>
+                            <div class="ayuda-tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltip-text">Puedes encontrar tu tarifa en la parte superior de tu recibo de CFE</span>
+                            </div>
+                            <div class="opciones-tarifa">
+                                <div class="opcion-tarifa">
+                                    <input type="radio" id="tarifa-domestica" name="tipo-tarifa" value="domestica" checked>
+                                    <label for="tarifa-domestica">Doméstica (casa habitación)</label>
+                                </div>
+                                <div class="opcion-tarifa">
+                                    <input type="radio" id="tarifa-dac" name="tipo-tarifa" value="dac">
+                                    <label for="tarifa-dac">DAC (Alto Consumo)</label>
+                                </div>
+                                <div class="opcion-tarifa">
+                                    <input type="radio" id="tarifa-comercial" name="tipo-tarifa" value="comercial">
+                                    <label for="tarifa-comercial">Comercial o Negocio</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grupo-formulario tarifa-domestica-container">
+                            <label for="tarifa-especifica">Tarifa específica:</label>
+                            <select id="tarifa-especifica">
+                                <option value="1">Tarifa 1 (Estándar)</option>
+                                <option value="1A">Tarifa 1A (Temperatura media mínima en verano)</option>
+                                <option value="1B">Tarifa 1B (Temperatura media en verano)</option>
+                                <option value="1C">Tarifa 1C (Temperatura cálida en verano)</option>
+                                <option value="1D">Tarifa 1D (Temperatura muy cálida en verano)</option>
+                                <option value="1E">Tarifa 1E (Temperatura extremadamente cálida en verano)</option>
+                                <option value="1F">Tarifa 1F (Temperatura extremadamente cálida todo el año)</option>
+                            </select>
+                            <div class="ayuda-tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltip-text">La tarifa depende de la temperatura promedio de tu localidad</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grupo-formulario tarifa-comercial-container" style="display: none;">
+                            <label for="tarifa-comercial-especifica">Tarifa comercial:</label>
+                            <select id="tarifa-comercial-especifica">
+                                <option value="PDBT">PDBT (Pequeña Demanda en Baja Tensión)</option>
+                                <option value="GDBT">GDBT (Gran Demanda en Baja Tensión)</option>
+                                <option value="RABT">RABT (Riego Agrícola en Baja Tensión)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="entrada-recibo" style="display: none;">
+                        <div class="grupo-formulario">
+                            <label for="fileInput">Sube tu recibo de CFE (PDF):</label>
+                            <div class="file-upload">
+                                <input type="file" id="fileInput" accept="application/pdf" />
+                                <label for="fileInput" class="file-label">
+                                    <i class="fas fa-file-pdf"></i> Seleccionar archivo
+                                </label>
+                                <span id="file-name">Ningún archivo seleccionado</span>
+                            </div>
+                            <small>Subiremos tu recibo para extraer automáticamente tu tarifa y consumo</small>
+                        </div>
+
+                        <div class="recibo-resultados" id="recibo-resultados" style="display: none;">
+                            <div class="recibo-info">
+                                <h3>Información detectada</h3>
+                                <div id="output" class="recibo-output"></div>
+                            </div>
+                            <div id="tablaContainer" class="tabla-container"></div>
+                        </div>
                     </div>
                     
-                    <div class="tarjeta-resultado">
-                        <div class="icono-resultado">📈</div>
-                        <h3>Ahorro total en la vida útil (30 años)</h3>
-                        <p id="ahorro-vida-util">$0.00 MXN</p>
-                    </div>
-                    
-                    <div class="tarjeta-resultado">
-                        <div class="icono-resultado">⏱️</div>
-                        <h3>Retorno de la inversión</h3>
-                        <p id="retorno-inversion">0 años</p>
+                    <div class="botones-navegacion">
+                        <button class="boton-anterior" id="anterior-2"><i class="fas fa-arrow-left"></i> Anterior</button>
+                        <button class="boton-siguiente" id="siguiente-2">Siguiente <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
-                <div class="sin-resultados" id="sin-resultados">
-                    <p>Ingresa tus datos y haz clic en "Calcular Ahorro" para ver los resultados.</p>
+            </div>
+
+            <div class="paso" id="paso-3">
+                <div class="numero-paso">3</div>
+                <div class="contenido-paso">
+                    <h2>Tu consumo de energía</h2>
+                    <p class="instruccion">Cuéntanos sobre tu consumo para calcular el ahorro</p>
+                    
+                    <div class="opciones-consumo">
+                        <div class="opcion-consumo activa" id="opcion-monto">
+                            <div class="tab-header">Monto de tu recibo</div>
+                            <div class="tab-content">
+                                <div class="grupo-formulario">
+                                    <label for="monto-recibo">¿Cuánto pagas aproximadamente en tu recibo bimestral?</label>
+                                    <div class="input-con-prefijo">
+                                        <span class="prefijo">$</span>
+                                        <input type="number" id="monto-recibo" placeholder="Ej: 1,200" min="100">
+                                    </div>
+                                    <small>Ingresa el monto promedio de tu recibo de luz</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="opcion-consumo" id="opcion-kwh">
+                            <div class="tab-header">Consumo en kWh</div>
+                            <div class="tab-content">
+                                <div class="grupo-formulario">
+                                    <label for="consumo-kwh">¿Cuál es tu consumo bimestral en kWh?</label>
+                                    <input type="number" id="consumo-kwh" placeholder="Ej: 250" min="50">
+                                    <div class="ayuda-tooltip">
+                                        <i class="fas fa-question-circle"></i>
+                                        <span class="tooltip-text">Puedes encontrar este dato en la sección de "Historial de consumo" de tu recibo</span>
+                                    </div>
+                                    <small>Si conoces tu consumo en kilowatts-hora, ingrésalo aquí</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="botones-navegacion">
+                        <button class="boton-anterior" id="anterior-3"><i class="fas fa-arrow-left"></i> Anterior</button>
+                        <button class="boton-calcular" id="calcular">Calcular mi ahorro <i class="fas fa-calculator"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="resultados-container oculto" id="resultados-container">
+            <h2>Tus resultados</h2>
+            <div class="tarjetas-resultados">
+                <div class="tarjeta-resultado">
+                    <div class="icono-resultado">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <h3>Ahorro estimado durante el 1er año</h3>
+                    <p id="ahorro-primer-anio">$0.00 MXN</p>
+                </div>
+                
+                <div class="tarjeta-resultado">
+                    <div class="icono-resultado">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Ahorro total en 30 años</h3>
+                    <p id="ahorro-vida-util">$0.00 MXN</p>
+                </div>
+                
+                <div class="tarjeta-resultado">
+                    <div class="icono-resultado">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h3>Recuperas tu inversión en</h3>
+                    <p id="retorno-inversion">0 años</p>
+                </div>
+            </div>
+            
+            <div class="detalles-sistema">
+                <h3>Sistema solar recomendado</h3>
+                <div class="detalles-grid">
+                    <div class="detalle">
+                        <span class="etiqueta">Capacidad del sistema:</span>
+                        <span class="valor" id="capacidad-sistema">0 kW</span>
+                    </div>
+                    <div class="detalle">
+                        <span class="etiqueta">Número de paneles:</span>
+                        <span class="valor" id="numero-paneles">0</span>
+                    </div>
+                    <div class="detalle">
+                        <span class="etiqueta">Inversión aproximada:</span>
+                        <span class="valor" id="inversion-aproximada">$0.00 MXN</span>
+                    </div>
+                    <div class="detalle">
+                        <span class="etiqueta">Reducción de CO₂:</span>
+                        <span class="valor" id="reduccion-co2">0 toneladas</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="acciones-resultados">
+                <button class="boton-recalcular" id="recalcular"><i class="fas fa-redo"></i> Recalcular</button>
+                <button class="boton-contacto" id="contacto">Solicitar cotización <i class="fas fa-file-invoice"></i></button>
+            </div>
+        </div>
+
+        <div class="seccion-info">
+            <h2>¿Por qué instalar paneles solares?</h2>
+            <div class="beneficios">
+                <div class="beneficio">
+                    <i class="fas fa-dollar-sign icono-beneficio"></i>
+                    <h3>Ahorro inmediato</h3>
+                    <p>Reduce tu recibo de luz desde el primer mes y protégete contra futuros aumentos de CFE.</p>
+                </div>
+                <div class="beneficio">
+                    <i class="fas fa-leaf icono-beneficio"></i>
+                    <h3>Cuida el planeta</h3>
+                    <p>Reduce tu huella de carbono y contribuye a un México más sostenible.</p>
+                </div>
+                <div class="beneficio">
+                    <i class="fas fa-bolt icono-beneficio"></i>
+                    <h3>Independencia energética</h3>
+                    <p>Genera tu propia electricidad y olvídate de los cortes de luz.</p>
+                </div>
+            </div>
+        </div>
+
         <footer>
-            <p>Calculadora</p>
+            <p>© 2025 Calculadora de Ahorro con Paneles Solares | Desarrollado para México</p>
         </footer>
     </div>
 
