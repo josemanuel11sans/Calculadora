@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const aumentoAnualPrecioElectricidad = 0.07 // 6% por año
 
   // Factor de emisión de CO2 por kWh en México (kg CO2/kWh)
-  const factorEmisionCO2 = 0.527 // Fuente: SEMARNAT
+  const factorEmisionCO2 = 0.438 // Fuente: SEMARNAT
 
   // Navegación entre pasos
   siguiente1.addEventListener("click", () => {
