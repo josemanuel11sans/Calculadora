@@ -138,16 +138,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Costo promedio de instalación de paneles solares en México (MXN por kW)
-  const costoInstalacionPorKw = 22000
+  const costoInstalacionPorKw = 3100 // 3100 MXN por kW
 
   // Potencia de un panel solar estándar (kW)
   const potenciaPanelEstandar = 0.4 // 400W = 0.4kW
 
   // Tasa de degradación anual de paneles solares (porcentaje)
-  const tasaDegradacionAnual = 0.005 // 0.5% por año
+  const tasaDegradacionAnual = 0.05 // 0.5% por año
 
   // Aumento anual del precio de electricidad (porcentaje)
-  const aumentoAnualPrecioElectricidad = 0.06 // 6% por año
+  const aumentoAnualPrecioElectricidad = 0.07 // 6% por año
 
   // Factor de emisión de CO2 por kWh en México (kg CO2/kWh)
   const factorEmisionCO2 = 0.527 // Fuente: SEMARNAT
@@ -312,13 +312,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (primeros6[0].tipo === "habitacional") {
           consumoAnual = primeros6.reduce((acc, r) => acc + r.dias, 0)
-          consumoBimestral = primeros6[0].dias
+          consumoBimestral = (consumoAnual / 6).toFixed(2)
           consumoMensual = (consumoAnual / 12).toFixed(2)
           unidad = "KWh"
           tipoTarifa = "domestica"
         } else {
           consumoAnual = primeros6.reduce((acc, r) => acc + r.consumo, 0)
-          consumoBimestral = primeros6[0].consumo
+          consumoBimestral = (consumoAnual / 6).toFixed(2)
           consumoMensual = (consumoAnual / 12).toFixed(2)
           unidad = "kWh"
           tipoTarifa = "comercial"
@@ -583,23 +583,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // Estimar tamaño del sistema solar requerido (en kW)
     // Fórmula: Consumo anual / (radiación solar * 365 días * factor de eficiencia)
     const factorEficiencia = 0.75 // Eficiencia del sistema (inversor, pérdidas, etc.)
-    const tamanioSistemaRequerido = consumoAnual / (radiacionSolar * 365 * factorEficiencia)
+    const tamanioSistemaRequerido = consumoAnual / (radiacionSolar * 365 * factorEficiencia) //consultar formula
 
     // Calcular número de paneles
     const numeroPanelesRequeridos = Math.ceil(tamanioSistemaRequerido / potenciaPanelEstandar)
 
     // Calcular costo de instalación del sistema solar
     const costoInstalacion = tamanioSistemaRequerido * costoInstalacionPorKw
+    console.log("Costo de instalación:", costoInstalacion)
+    console.log("Tamaño del sistema requerido:", tamanioSistemaRequerido)
+    console.log("Número de paneles requeridos:", numeroPanelesRequeridos)
+    console.log("Radiación solar:", radiacionSolar)
+    console.log("Consumo anual:", consumoAnual)
+    console.log("Costo anual de electricidad:", costoAnualElectricidad)
+    console.log("Ahorro del primer año:", costoAnualElectricidad * 0.9)
+    console.log("Ahorro durante la vida útil:", costoAnualElectricidad * 0.9 * 30)
+    console.log("Reducción de CO2:", (consumoAnual * 0.9 * factorEmisionCO2) / 1000 * 30)
+    console.log("Retorno de inversión (años):", costoInstalacion / (costoAnualElectricidad * 0.9))
+    
 
     // Calcular ahorro del primer año (asumiendo que el 90% de la electricidad es reemplazada por solar)
     const ratioCoberturaSolar = 0.9
     const ahorroPrimerAnio = costoAnualElectricidad * ratioCoberturaSolar
 
-    // Calcular ahorro durante la vida útil (30 años)
+    // Calcular ahorro durante la vida útil (25 años)
     let ahorroVidaUtil = 0
     let ahorroAnioActual = ahorroPrimerAnio
 
-    for (let anio = 0; anio < 30; anio++) {
+    for (let anio = 0; anio < 25; anio++) {
       ahorroVidaUtil += ahorroAnioActual
 
       // Ajustar por degradación del panel y aumento del precio de electricidad
@@ -613,9 +624,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fórmula: costo neto / ahorro total anual
     const retornoInversionAnios = costoInstalacion / ahorroPrimerAnio
 
-    // Calcular reducción de CO2 en toneladas (durante 30 años)
+    // Calcular reducción de CO2 en toneladas (durante 25 años)
     const reduccionCO2Anual = (consumoAnual * ratioCoberturaSolar * factorEmisionCO2) / 1000 // Convertir kg a toneladas
-    const reduccionCO2Total = reduccionCO2Anual * 30 // Durante 30 años
+    const reduccionCO2Total = reduccionCO2Anual * 25 // Durante 25 años
 
     return {
       ahorroPrimerAnio: ahorroPrimerAnio,
