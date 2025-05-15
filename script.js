@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hidalgo: 5.3,
     jalisco: 5.6,
     michoacan: 5.5,
-    morelos: 6.6,
+    morelos: 6.0,
     nayarit: 5.5,
     nuevo_leon: 5.7,
     oaxaca: 5.5,
@@ -88,16 +88,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Costo promedio de instalación de paneles solares en México (MXN por kW)
-  // Basado en datos reales del mercado mexicano
-  const costoInstalacionPorKw = 22000
+  const costoInstalacionPorKw = 3100
 
   // Tasa de degradación anual de paneles solares (porcentaje)
-  // Basado en datos de fabricantes y estudios técnicos
   const tasaDegradacionAnual = 0.005 // 0.5% por año
 
   // Aumento anual del precio de electricidad (porcentaje)
-  // Basado en tendencias históricas de CFE
-  const aumentoAnualPrecioElectricidad = 0.07 // 7% por año APROXIMADO 
+  const aumentoAnualPrecioElectricidad = 0.07 // 7% por año APROXIMADO **
 
   formulario.addEventListener("submit", (e) => {
     e.preventDefault()
@@ -107,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const estado = document.getElementById("estado").value
     const tarifa = document.getElementById("tarifa").value
 
-    // Validar consumo mínimo
+    // Validar consumo mínimo **
     if (consumo < 100) {
       alert("El consumo mínimo debe ser de 100 kWh/mes")
       return
@@ -167,11 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const ratioCoberturaSolar = 0.9
     const ahorroPrimerAnio = costoAnualElectricidad * ratioCoberturaSolar
 
-    // Calcular ahorro durante la vida útil (30 años)
+    // Calcular ahorro durante la vida útil (25 años) ****
     let ahorroVidaUtil = 0
     let ahorroAnioActual = ahorroPrimerAnio
 
-    for (let anio = 0; anio < 30; anio++) {
+    for (let anio = 0; anio < 25; anio++) {
       ahorroVidaUtil += ahorroAnioActual
 
       // Ajustar por degradación del panel y aumento del precio de electricidad
@@ -186,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let ahorroAcumulado = 0
     let aniosRetorno = 0
 
-    while (ahorroAcumulado < costoInstalacion && aniosRetorno < 30) {
+    while (ahorroAcumulado < costoInstalacion && aniosRetorno < 25) {
       const eficienciaPanel = Math.pow(1 - tasaDegradacionAnual, aniosRetorno)
       const precioElectricidad = Math.pow(1 + aumentoAnualPrecioElectricidad, aniosRetorno)
 
