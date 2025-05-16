@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Costo promedio de instalación de paneles solares en México (MXN por kW)
-  const costoInstalacionPorKw = 3100 // 3100 MXN por kW
+  const costoInstalacionPorKw = 5000 // 3100 MXN por kW
 
   // Potencia de un panel solar estándar (kW)
   const potenciaPanelEstandar = 0.4 // 400W = 0.4kW
@@ -317,11 +317,14 @@ document.addEventListener("DOMContentLoaded", () => {
           unidad = "KWh"
           tipoTarifa = "domestica"
         } else {
-          consumoAnual = primeros6.reduce((acc, r) => acc + r.consumo, 0)
-          consumoBimestral = (consumoAnual / 6).toFixed(2)
-          consumoMensual = (consumoAnual / 12).toFixed(2)
+          consumoAnual = registros.reduce((acc, r) => acc + r.consumo, 0)
+          consumoMensual = (consumoAnual / registros.length).toFixed(2)
+          console.log("consumo mensual", consumoMensual);
+          
+          consumoBimestral = consumoMensual * 2
+          // consumoBimestral = (consumoAnual / 6).toFixed(2)
           unidad = "kWh"
-          tipoTarifa = "comercial"
+          tipoTarifa = "comercial"  
         }
 
         // Guardar datos para cálculos posteriores
@@ -350,11 +353,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // MOSTRAR RESUMEN
-        output.textContent =
+        
+          if(registros[0].tipo === "habitacional") {
+           output.textContent =
           `⚡ Tarifa: ${tarifa}\n📊 Registros detectados: ${registros.length}\n` +
           `📆 Consumo de últimos 12 meses (6 registros):\n` +
-          `   Consumo anual: ${consumoAnual} ${unidad}\n` +
+          `   Consumo de anual: ${consumoAnual} ${unidad}\n` +
           `   Promedio mensual: ${consumoMensual} ${unidad}`
+
+          }else if(registros[0].tipo === "empresarial") {
+            output.textContent =
+          `⚡ Tarifa: ${tarifa}\n📊 Registros detectados: ${registros.length}\n` +
+          `📆 Consumo de últimos 12 meses (6 registros):\n` +
+          `   Consumo de: ${registros.length} meses ${consumoAnual} ${unidad}\n` +
+          `   Promedio mensual: ${consumoMensual} ${unidad}`
+
+          }
 
         // TABLA HTML
         tablaContainer.innerHTML = ""
@@ -379,7 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
           body = registros
             .map(
               (r, i) => `
-            <tr class="${i < 6 ? "resaltado" : ""}">
+            <tr class="${i < registros.length ? "resaltado" : ""}">
               <td>${r.mes}</td><td>${r.anio}</td><td>${r.dias}</td><td>${r.consumo}</td>
               <td>${r.factor}</td><td>${r.demanda}</td><td>${r.precio}</td>
             </tr>
@@ -583,13 +597,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Estimar tamaño del sistema solar requerido (en kW)
     // Fórmula: Consumo anual / (radiación solar * 365 días * factor de eficiencia)
     const factorEficiencia = 0.75 // Eficiencia del sistema (inversor, pérdidas, etc.)
-    const tamanioSistemaRequerido = consumoAnual / (radiacionSolar * 365 * factorEficiencia) //consultar formula
-
+    console.log("consimo anual", consumoAnual)
+    console.log("radiacion solar", radiacionSolar)
+    console.log("factor eficiencia", factorEficiencia)
+    //consultar formula
+    // const tamanioSistemaRequerido = consumoAnual / (radiacionSolar * 365 * factorEficiencia) 
+    const tamanioSistemaRequerido = (((consumoAnual/365)/radiacionSolar)*1000)
     // Calcular número de paneles
-    const numeroPanelesRequeridos = Math.ceil(tamanioSistemaRequerido / potenciaPanelEstandar)
-
+    // const numeroPanelesRequeridos = Math.ceil(tamanioSistemaRequerido / potenciaPanelEstandar)
+   const numeroPanelesRequeridos = Math.ceil(tamanioSistemaRequerido / 400)
     // Calcular costo de instalación del sistema solar
-    const costoInstalacion = tamanioSistemaRequerido * costoInstalacionPorKw
+    // const costoInstalacion = tamanioSistemaRequerido * costoInstalacionPorKw
+    const costoInstalacion = numeroPanelesRequeridos * costoInstalacionPorKw
     console.log("Costo de instalación:", costoInstalacion)
     console.log("Tamaño del sistema requerido:", tamanioSistemaRequerido)
     console.log("Número de paneles requeridos:", numeroPanelesRequeridos)
@@ -600,7 +619,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Ahorro durante la vida útil:", costoAnualElectricidad * 0.9 * 30)
     console.log("Reducción de CO2:", (consumoAnual * 0.9 * factorEmisionCO2) / 1000 * 30)
     console.log("Retorno de inversión (años):", costoInstalacion / (costoAnualElectricidad * 0.9))
-    
 
     // Calcular ahorro del primer año (asumiendo que el 90% de la electricidad es reemplazada por solar)
     const ratioCoberturaSolar = 0.9
@@ -644,7 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ahorroPrimerAnio.textContent = formatearMoneda(resultados.ahorroPrimerAnio)
     ahorroVidaUtil.textContent = formatearMoneda(resultados.ahorroVidaUtil)
     retornoInversion.textContent = resultados.retornoInversionAnios.toFixed(1) + " años"
-    capacidadSistema.textContent = resultados.tamanioSistema.toFixed(2) + " kW"
+    capacidadSistema.textContent = resultados.tamanioSistema.toFixed(2) + " W"
     numeroPaneles.textContent = resultados.numeroPaneles + " paneles"
     inversionAproximada.textContent = formatearMoneda(resultados.costoInstalacion)
     reduccionCO2.textContent = resultados.reduccionCO2.toFixed(1) + " toneladas"
