@@ -645,7 +645,7 @@ contacto.addEventListener("click", () => {
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
   doc.text("Esta cotización es aproximada y puede variar según condiciones específicas.", 105, footerY + 15, { align: 'center' })
-  doc.text("Contáctenos: ventas@hexasolar.com.mx | Tel: (+52) 5590481290 | www.hexasolar.com", 105, footerY + 20, { align: 'center' })
+  doc.text("Contáctenos: ventas@hexasolar.com.mx | Tel: (+52) 5590481290 | www.hexasolar.com.mx", 105, footerY + 20, { align: 'center' })
   
   // Simulación de código QR
   try {
@@ -667,7 +667,7 @@ contacto.addEventListener("click", () => {
     doc.addImage(logoBase64, 'PNG', margenIzq, footerY + 5, 15, 15);
     
     // Guardar el PDF después de que la imagen se haya cargado
-    doc.save("cotizacion-hexasolar.pdf");
+    doc.save("cotización-hexasolar.pdf");
   };
 
  // Manejar errores de carga de imagen
@@ -676,7 +676,7 @@ contacto.addEventListener("click", () => {
     // Fallback: dibujar un círculo simple
     doc.setFillColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
     doc.circle(margenIzq + 7.5, footerY + 12.5, 7.5, 'F');
-    doc.save("cotizacion-hexasolar.pdf");
+    doc.save("cotización-hexasolar.pdf");
   };
   
   // Importante: No llamar a doc.save() aquí, ya que se llamará en los callbacks
