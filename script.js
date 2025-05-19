@@ -444,11 +444,254 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   // Contacto (simulado)
-  contacto.addEventListener("click", () => {
-    alert(
-      "¡Gracias por tu interés! Un asesor se pondrá en contacto contigo pronto para brindarte una cotización personalizada.",
-    )
+  // contacto.addEventListener("click", () => {
+  //   alert(
+  //     "¡Gracias por tu interés! Un asesor se pondrá en contacto contigo pronto para brindarte una cotización personalizada.",
+  //   )
+  // })
+contacto.addEventListener("click", () => {
+  // Obtener los resultados actuales
+  const estadoSel = estado.options[estado.selectedIndex]?.text || estado.value
+  const capacidad = capacidadSistema.textContent
+  const paneles = numeroPaneles.textContent
+  const inversion = inversionAproximada.textContent
+  const ahorro1 = ahorroPrimerAnio.textContent
+  const ahorro25 = ahorroVidaUtil.textContent
+  const retorno = retornoInversion.textContent
+  const co2 = reduccionCO2.textContent
+  const fecha = new Date().toLocaleDateString('es-MX')
+
+  // Crear PDF con jsPDF
+  const { jsPDF } = window.jspdf
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
   })
+
+  // Definir colores
+  const colorPrimario = [22, 160, 133] // Verde azulado
+  const colorSecundario = [243, 156, 18] // Naranja
+  const colorTexto = [44, 62, 80] // Azul oscuro
+  const colorFondo = [247, 247, 247] // Gris muy claro
+  const colorTextoGrafico = [62, 156, 75] // verde
+
+  // Márgenes y dimensiones
+  const margenIzq = 15
+  const margenDer = 195
+  const anchoUtil = margenDer - margenIzq
+
+  // Fondo de página completa con margen superior
+  doc.setFillColor(255, 255, 255)
+  doc.rect(0, 0, 210, 297, 'F')
+
+  // Encabezado
+  doc.setFillColor(colorPrimario[0], colorPrimario[1], colorPrimario[2])
+  doc.rect(0, 0, 210, 30, 'F')
+  
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(22)
+  doc.text("Cotización de Paneles Solares", 105, 15, { align: 'center' })
+  doc.setFontSize(10)
+  doc.text(`Fecha: ${fecha}`, margenDer, 25, { align: 'right' })
+
+  // Sección de información del cliente - Lado izquierdo
+  let yPos = 40
+  
+  // Título de sección
+  doc.setFillColor(colorSecundario[0], colorSecundario[1], colorSecundario[2])
+  doc.roundedRect(margenIzq, yPos, anchoUtil / 2 - 5, 8, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(11)
+  doc.text("INFORMACIÓN DEL SISTEMA", margenIzq + (anchoUtil / 4) - 5, yPos + 5.5, { align: 'center' })
+  
+  // Contenido de información del sistema
+  doc.setFillColor(colorFondo[0], colorFondo[1], colorFondo[2])
+  doc.roundedRect(margenIzq, yPos + 10, anchoUtil / 2 - 5, 50, 2, 2, 'F')
+  
+  // Datos del sistema
+  doc.setTextColor(colorTexto[0], colorTexto[1], colorTexto[2])
+  doc.setFontSize(10)
+  const infoStartY = yPos + 20
+  const lineHeight = 8
+  
+  // Etiquetas - columna izquierda
+  doc.setFont('helvetica', 'bold')
+  doc.text("Ubicación:", margenIzq + 5, infoStartY)
+  doc.text("Capacidad del Sistema:", margenIzq + 5, infoStartY + lineHeight)
+  doc.text("Número de Paneles:", margenIzq + 5, infoStartY + lineHeight * 2)
+  doc.text("Inversión Aproximada:", margenIzq + 5, infoStartY + lineHeight * 3)
+  
+  // Valores - alineados
+  doc.setFont('helvetica', 'normal')
+  const colValores = margenIzq + 50
+  doc.text(estadoSel, colValores, infoStartY)
+  doc.text(capacidad, colValores, infoStartY + lineHeight)
+  doc.text(paneles, colValores, infoStartY + lineHeight * 2)
+  doc.text(inversion, colValores, infoStartY + lineHeight * 3)
+
+  // Sección de beneficios - Lado derecho
+  // Título de sección
+  doc.setFillColor(colorSecundario[0], colorSecundario[1], colorSecundario[2])
+  doc.roundedRect(margenIzq + (anchoUtil / 2) + 5, yPos, anchoUtil / 2 - 5, 8, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(11)
+  doc.text("BENEFICIOS", margenIzq + (anchoUtil * 3/4) + 5, yPos + 5.5, { align: 'center' })
+  
+  // Contenido de beneficios
+  doc.setFillColor(colorFondo[0], colorFondo[1], colorFondo[2])
+  doc.roundedRect(margenIzq + (anchoUtil / 2) + 5, yPos + 10, anchoUtil / 2 - 5, 50, 2, 2, 'F')
+  
+  // Datos de beneficios
+  const benefStartY = infoStartY
+  const colBenef = margenIzq + (anchoUtil / 2) + 10
+  
+  // Etiquetas - columna derecha
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(colorTexto[0], colorTexto[1], colorTexto[2])
+  doc.text("Ahorro Primer Año:", colBenef, benefStartY)
+  doc.text("Ahorro Total (25 años):", colBenef, benefStartY + lineHeight)
+  doc.text("Retorno de Inversión:", colBenef, benefStartY + lineHeight * 2)
+  doc.text("Reducción de CO2:", colBenef, benefStartY + lineHeight * 3)
+  
+  // Valores - alineados
+  doc.setFont('helvetica', 'normal')
+  const colValoresBenef = colBenef + 50
+  doc.text(ahorro1, colValoresBenef, benefStartY)
+  doc.text(ahorro25, colValoresBenef, benefStartY + lineHeight)
+  doc.text(retorno, colValoresBenef, benefStartY + lineHeight * 2)
+  doc.text(co2, colValoresBenef, benefStartY + lineHeight * 3)
+
+  // Sección de visualización - Gráfico simulado
+  yPos = 105
+  doc.setFillColor(colorPrimario[0], colorPrimario[1], colorPrimario[2], 0.1)
+  doc.roundedRect(margenIzq, yPos, anchoUtil, 70, 3, 3, 'F')
+  
+  // Título de la sección
+  doc.setFillColor(colorPrimario[0], colorPrimario[1], colorPrimario[2])
+  doc.roundedRect(margenIzq, yPos, anchoUtil, 8, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(11)
+  doc.text("VISUALIZACIÓN DE AHORRO", 105, yPos + 5.5, { align: 'center' })
+  
+  // Gráfico simulado
+  // Eje X
+  doc.setDrawColor(colorTextoGrafico[0], colorTextoGrafico[1], colorTextoGrafico[2])
+  doc.setLineWidth(0.3)
+  doc.line(margenIzq + 20, yPos + 60, margenDer - 20, yPos + 60)
+  
+  // Eje Y
+  doc.line(margenIzq + 20, yPos + 15, margenIzq + 20, yPos + 60)
+  
+  // Barras de gráfico
+  const numBarras = 5
+  const anchoBarra = (anchoUtil - 60) / numBarras
+  
+  for (let i = 0; i < numBarras; i++) {
+    const altura = 10 + (i * 7)
+    const xBarra = margenIzq + 30 + (i * anchoBarra)
+    
+    doc.setFillColor(colorSecundario[0], colorSecundario[1], colorSecundario[2])
+    doc.rect(xBarra, yPos + 60 - altura, anchoBarra - 10, altura, 'F')
+    
+    // Etiquetas de años
+    doc.setTextColor(colorTextoGrafico[0], colorTextoGrafico[1], colorTextoGrafico[2])
+    doc.setFontSize(8)
+    doc.text(`Año ${(i+1)*5}`, xBarra + (anchoBarra - 10)/2, yPos + 65, { align: 'center' })
+  }
+  
+  // Leyenda del gráfico
+  doc.setFontSize(9)
+  doc.text("Ahorro acumulado (MXN)", margenIzq + 25, yPos + 20)
+  
+  // Sección de información adicional
+  yPos = 180
+  doc.setFillColor(colorFondo[0], colorFondo[1], colorFondo[2])
+  doc.roundedRect(margenIzq, yPos, anchoUtil, 50, 3, 3, 'F')
+  
+  // Título de la sección
+  doc.setFillColor(colorSecundario[0], colorSecundario[1], colorSecundario[2])
+  doc.roundedRect(margenIzq, yPos, anchoUtil, 8, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(11)
+  doc.text("INFORMACIÓN ADICIONAL", 105, yPos + 5.5, { align: 'center' })
+  
+  // Contenido de información adicional
+  doc.setTextColor(colorTexto[0], colorTexto[1], colorTexto[2])
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'normal')
+  
+  const infoAdicionalY = yPos + 20
+  doc.text("• Los paneles solares tienen una garantía de 25 años y una vida útil de más de 30 años.", margenIzq + 5, infoAdicionalY)
+  doc.text("• La instalación incluye todos los materiales necesarios y mano de obra calificada.", margenIzq + 5, infoAdicionalY + lineHeight)
+  doc.text("• Genera tu propia electricidad y olvídate de los cortes de luz.", margenIzq + 5, infoAdicionalY + lineHeight * 2)
+  doc.text("• El mantenimiento recomendado es una limpieza cada 6 meses.", margenIzq + 5, infoAdicionalY + lineHeight * 3)
+  
+  // Pie de página
+  const footerY = 260
+  
+  // Línea separadora
+  doc.setDrawColor(colorPrimario[0], colorPrimario[1], colorPrimario[2])
+  doc.setLineWidth(0.5)
+  doc.line(margenIzq, footerY, margenDer, footerY)
+  
+  // Contenido del pie de página
+  doc.setTextColor(colorTexto[0], colorTexto[1], colorTexto[2])
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'bold')
+  doc.text("¡Gracias por considerar la energía solar para su hogar!", 105, footerY + 10, { align: 'center' })
+  
+  doc.setFontSize(8)
+  doc.setFont('helvetica', 'normal')
+  doc.text("Esta cotización es aproximada y puede variar según condiciones específicas.", 105, footerY + 15, { align: 'center' })
+  doc.text("Contáctenos: ventas@hexasolar.com.mx | Tel: (+52) 5590481290 | www.hexasolar.com", 105, footerY + 20, { align: 'center' })
+  
+  // Simulación de código QR
+  try {
+ // Crear una imagen y cargarla desde la ruta local
+  const logoImg = new Image();
+  logoImg.src = '/logo-transparente-60.png'; // Ajusta esta ruta a la ubicación real de tu logo en el proyecto
+  logoImg.onload = function() {
+    // Crear un canvas para convertir la imagen a base64
+    const canvas = document.createElement('canvas');
+    canvas.width = logoImg.width;
+    canvas.height = logoImg.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(logoImg, 0, 0);
+    
+    // Obtener la imagen como base64
+    const logoBase64 = canvas.toDataURL('image/png');
+    
+    // Añadir la imagen al PDF
+    doc.addImage(logoBase64, 'PNG', margenIzq, footerY + 5, 15, 15);
+    
+    // Guardar el PDF después de que la imagen se haya cargado
+    doc.save("cotizacion-hexasolar.pdf");
+  };
+
+ // Manejar errores de carga de imagen
+  logoImg.onerror = function() {
+    console.error('Error al cargar el logo desde la ruta local');
+    // Fallback: dibujar un círculo simple
+    doc.setFillColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
+    doc.circle(margenIzq + 7.5, footerY + 12.5, 7.5, 'F');
+    doc.save("cotizacion-paneles-solares.pdf");
+  };
+  
+  // Importante: No llamar a doc.save() aquí, ya que se llamará en los callbacks
+  return; // Salir de la función para evitar que se ejecute el doc.save() al final
+  
+  // doc.addImage(logoUrl, 'PNG', margenIzq, footerY + 5, 15, 15);
+} catch (error) {
+  console.error('Error al cargar la imagen:', error);
+  // Fallback en caso de error: dibujar un círculo simple
+  doc.setFillColor(colorPrimario[0], colorPrimario[1], colorPrimario[2]);
+  doc.circle(margenIzq + 7.5, footerY + 12.5, 7.5, 'F');
+}
+  // Guardar el PDF
+  doc.save("cotizacion-paneles-solares.pdf")
+})
 
   // Funciones de validación
   function validarPaso1() {
