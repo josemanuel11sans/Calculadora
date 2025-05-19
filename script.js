@@ -651,7 +651,7 @@ contacto.addEventListener("click", () => {
   try {
  // Crear una imagen y cargarla desde la ruta local
   const logoImg = new Image();
-  logoImg.src = './logo-transparente-60.png'; // Ajusta esta ruta a la ubicación real de tu logo en el proyecto
+  logoImg.src = './img/logo-transparente-60.png'; // Ajusta esta ruta a la ubicación real de tu logo en el proyecto
   logoImg.onload = function() {
     // Crear un canvas para convertir la imagen a base64
     const canvas = document.createElement('canvas');
