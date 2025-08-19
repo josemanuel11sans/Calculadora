@@ -1,312 +1,338 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Ahorro con Paneles Solares</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <title>Calculadora Solar Fotovoltaica</title>
+    <link rel="stylesheet" href="styles2.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    html2pdf CDN para exportar a PDF
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
+
 <body>
-    <div class="contenedor">
-        <header>
-            <h1>¿Cuánto puedes ahorrar con paneles solares?</h1>
-            <p>Calcula tu ahorro en 3 simples pasos</p>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <i class="fas fa-solar-panel"></i>
+                <h1>Calculadora Solar Fotovoltaica</h1>
+                <p>Sistema de cálculo para instalaciones solares</p>
+            </div>
         </header>
-
-<<<<<<< HEAD
-        <a href="index2.html"> Version 2</a>
-
-        <div class="contenedor-calculadora">
-            <div class="seccion-entrada">
-                <h2>Ingresa tus datos</h2>
-                <form id="formulario-solar">
-                    <div class="grupo-formulario">
-                        <label for="consumo">Consumo promedio mensual (kWh):</label>
-                        <input type="number" id="consumo" min="100" placeholder="Mínimo 100 kWh/mes" required>
-                        <small>Ingresa tu consumo promedio mensual del último año</small>
+        <a href="index.html"> Regresar a  la version 1</a>
+        <div class="main-content">
+            <div class="form-section">
+                <div class="card">
+                    <h2><i class="fas fa-user"></i> Información del Proyecto</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombreCliente">Nombre del Cliente:</label>
+                            <input type="text" id="nombreCliente" placeholder="Ingrese nombre del cliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="nombreEjecutivo">Ejecutivo de Ventas:</label>
+                            <input type="text" id="nombreEjecutivo" placeholder="Ingrese su nombre">
+                        </div>
                     </div>
-
-=======
-        <div class="pasos-container">
-            <div class="paso activo" id="paso-1">
-                <div class="numero-paso">1</div>
-                <div class="contenido-paso">
-                    <h2>¿Dónde te encuentras?</h2>
-                    <p class="instruccion">Selecciona tu estado para calcular la energía solar disponible en tu región</p>
-                    
->>>>>>> 71821b6c8f23c292ea79d4d16b06d2507000018e
-                    <div class="grupo-formulario">
-                        <label for="estado">Estado de la República:</label>
-                        <select id="estado" required>
-                            <option value="" disabled selected>Selecciona tu estado</option>
-                            <option value="aguascalientes">Aguascalientes</option>
-                            <option value="baja_california">Baja California</option>
-                            <option value="baja_california_sur">Baja California Sur</option>
-                            <option value="campeche">Campeche</option>
-                            <option value="chiapas">Chiapas</option>
-                            <option value="chihuahua">Chihuahua</option>
-                            <option value="coahuila">Coahuila</option>
-                            <option value="colima">Colima</option>
-                            <option value="durango">Durango</option>
-                            <option value="estado_de_mexico">Estado de México</option>
-                            <option value="guanajuato">Guanajuato</option>
-                            <option value="guerrero">Guerrero</option>
-                            <option value="hidalgo">Hidalgo</option>
-                            <option value="jalisco">Jalisco</option>
-                            <option value="michoacan">Michoacán</option>
-                            <option value="morelos">Morelos</option>
-                            <option value="nayarit">Nayarit</option>
-                            <option value="nuevo_leon">Nuevo León</option>
-                            <option value="oaxaca">Oaxaca</option>
-                            <option value="puebla">Puebla</option>
-                            <option value="queretaro">Querétaro</option>
-                            <option value="quintana_roo">Quintana Roo</option>
-                            <option value="san_luis_potosi">San Luis Potosí</option>
-                            <option value="sinaloa">Sinaloa</option>
-                            <option value="sonora">Sonora</option>
-                            <option value="tabasco">Tabasco</option>
-                            <option value="tamaulipas">Tamaulipas</option>
-                            <option value="tlaxcala">Tlaxcala</option>
-                            <option value="veracruz">Veracruz</option>
-                            <option value="yucatan">Yucatán</option>
-                            <option value="zacatecas">Zacatecas</option>
-                            <option value="cdmx">Ciudad de México</option>
+                </div>
+                <div class="card">
+                    <h2><i class="fas fa-chart-line"></i> Datos de Consumo</h2>
+                    <div class="form-group">
+                        <label for="tipoPeriodo">Tipo de Período:</label>
+                        <select id="tipoPeriodo" onchange="updateConsumoFields()">
+                            <option value="mensual">Mensual (12 valores)</option>
+                            <option value="bimestral">Bimestral (6 valores)</option>
                         </select>
                     </div>
-                    
-                    <button class="boton-siguiente" id="siguiente-1">Siguiente <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </div>
 
-            <div class="paso" id="paso-2">
-                <div class="numero-paso">2</div>
-                <div class="contenido-paso">
-                    <h2>Tu recibo de luz</h2>
-                    <p class="instruccion">Necesitamos algunos datos de tu recibo para calcular tu ahorro</p>
-                    
-                    <div class="grupo-formulario">
-                        <label for="metodo-entrada">¿Cómo prefieres ingresar tus datos?</label>
-                        <div class="opciones-entrada">
-                            <div class="opcion-entrada activa" id="opcion-manual">
-                                <div class="tab-header">Ingresar manualmente</div>
-                            </div>
-                            <div class="opcion-entrada" id="opcion-recibo">
-                                <div class="tab-header">Cargar mi recibo CFE</div>
-                            </div>
+                    <div class="form-group">
+                        <label>Consumo Actual (kWh):</label>
+                        <div id="consumoInputs" class="consumo-grid">
+                            Se generará dinámicamente
                         </div>
-                    </div>
-
-                    <div id="entrada-manual">
-                        <div class="grupo-formulario">
-                            <label for="tarifa">¿Qué tipo de tarifa tienes?</label>
-                            <div class="ayuda-tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Puedes encontrar tu tarifa en la parte superior de tu recibo de CFE</span>
-                            </div>
-                            <div class="opciones-tarifa">
-                                <div class="opcion-tarifa">
-                                    <input type="radio" id="tarifa-domestica" name="tipo-tarifa" value="domestica" checked>
-                                    <label for="tarifa-domestica">Doméstica (casa habitación)</label>
-                                </div>
-                                <div class="opcion-tarifa">
-                                    <input type="radio" id="tarifa-dac" name="tipo-tarifa" value="dac">
-                                    <label for="tarifa-dac">DAC (Alto Consumo)</label>
-                                </div>
-                                <div class="opcion-tarifa">
-                                    <input type="radio" id="tarifa-comercial" name="tipo-tarifa" value="comercial">
-                                    <label for="tarifa-comercial">Comercial o Negocio</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grupo-formulario tarifa-domestica-container">
-                            <label for="tarifa-especifica">Tarifa específica:</label>
-                            <select id="tarifa-especifica">
-                                <option value="1">Tarifa 1 (Estándar)</option>
-                                <option value="1A">Tarifa 1A (Temperatura media mínima en verano)</option>
-                                <option value="1B">Tarifa 1B (Temperatura media en verano)</option>
-                                <option value="1C">Tarifa 1C (Temperatura cálida en verano)</option>
-                                <option value="1D">Tarifa 1D (Temperatura muy cálida en verano)</option>
-                                <option value="1E">Tarifa 1E (Temperatura extremadamente cálida en verano)</option>
-                                <option value="1F">Tarifa 1F (Temperatura extremadamente cálida todo el año)</option>
-                            </select>
-                            <div class="ayuda-tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">La tarifa depende de la temperatura promedio de tu localidad</span>
-                            </div>
-                        </div>
-                        
-                        <div class="grupo-formulario tarifa-comercial-container" style="display: none;">
-                            <label for="tarifa-comercial-especifica">Tarifa comercial:</label>
-                            <select id="tarifa-comercial-especifica">
-                                <option value="PDBT">PDBT (Pequeña Demanda en Baja Tensión)</option>
-                                <option value="GDBT">GDBT (Gran Demanda en Baja Tensión)</option>
-                                <option value="RABT">RABT (Riego Agrícola en Baja Tensión)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="entrada-recibo" style="display: none;">
-                        <div class="grupo-formulario">
-                            <label for="fileInput">Sube tu recibo de CFE (PDF):</label>
-                            <div class="file-upload">
-                                <input type="file" id="fileInput" accept="application/pdf" />
-                                <label for="fileInput" class="file-label">
-                                    <i class="fas fa-file-pdf"></i> Seleccionar archivo
-                                </label>
-                                <span id="file-name">Ningún archivo seleccionado</span>
-                            </div>
-                            <small>Subiremos tu recibo para extraer automáticamente tu tarifa y consumo</small>
-                        </div>
-
-                        <div class="recibo-resultados" id="recibo-resultados" style="display: none;">
-                            <div class="recibo-info">
-                                <h3>Información detectada</h3>
-                                <div id="output" class="recibo-output"></div>
-                            </div>
-                            <div id="tablaContainer" class="tabla-container"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="botones-navegacion">
-                        <button class="boton-anterior" id="anterior-2"><i class="fas fa-arrow-left"></i> Anterior</button>
-                        <button class="boton-siguiente" id="siguiente-2">Siguiente <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-map-marker-alt"></i> Ubicación</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="latitud">Latitud:</label>
+                            <input type="number" id="latitud" step="0.000001" placeholder="20.676667" value="20.676667">
+                        </div>
+                        <div class="form-group">
+                            <label for="longitud">Longitud:</label>
+                            <input type="number" id="longitud" step="0.000001" placeholder="-99.1332" value="-99.1332">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-solar-panel"></i> Especificaciones del Panel</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="potenciaPanel">Potencia Nominal (W):</label>
+                            <input type="number" id="potenciaPanel" placeholder="565" value="565">
+                        </div>
+                        <div class="form-group">
+                            <label for="anchoPanel">Ancho (cm):</label>
+                            <input type="number" id="anchoPanel" placeholder="113.4" value="113.4">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="altoPanel">Alto (cm):</label>
+                            <input type="number" id="altoPanel" placeholder="227.8" value="227.8">
+                        </div>
+                        <div class="form-group">
+                            <label for="pesoPanel">Peso (kg):</label>
+                            <input type="number" id="pesoPanel" placeholder="28" value="28">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-cogs"></i> Configuración del Sistema</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eficiencia">Eficiencia del Sistema:</label>
+                            <input type="number" id="eficiencia" step="0.01" min="0" max="1" placeholder="0.76"
+                                value="0.76">
+                        </div>
+                        <div class="form-group">
+                            <label for="porcentajeAhorro">% de Ahorro Requerido:</label>
+                            <input type="number" id="porcentajeAhorro" placeholder="100" value="100">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="limitacionEspacio">
+                            <span class="checkmark"></span>
+                            Limitación de Espacio
+                        </label>
+                    </div>
+
+                    <div class="form-group" id="areaGroup">
+                        <label for="areaDisponible">Área Disponible (m²):</label>
+                        <input type="number" id="areaDisponible" placeholder="40" value="40">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pesoEstructura">Peso de Estructura por Módulo (kg):</label>
+                        <input type="number" id="pesoEstructura" placeholder="20" value="20">
+                    </div>
+                </div>
+
+                <button class="calculate-btn" onclick="calcularSistema()">
+                    <i class="fas fa-calculator"></i>
+                    Calcular Sistema Solar
+                </button>
             </div>
 
-            <div class="paso" id="paso-3">
-                <div class="numero-paso">3</div>
-                <div class="contenido-paso">
-                    <h2>Tu consumo de energía</h2>
-                    <p class="instruccion">Cuéntanos sobre tu consumo para calcular el ahorro</p>
-                    
-                    <div class="opciones-consumo">
-                        <div class="opcion-consumo activa" id="opcion-monto">
-                            <div class="tab-header">Monto de tu recibo</div>
-                            <div class="tab-content">
-                                <div class="grupo-formulario">
-                                    <label for="monto-recibo">¿Cuánto pagas aproximadamente en tu recibo bimestral?</label>
-                                    <div class="input-con-prefijo">
-                                        <span class="prefijo">$</span>
-                                        <input type="number" id="monto-recibo" placeholder="Ej: 1,200" min="100">
-                                    </div>
-                                    <small>Ingresa el monto promedio de tu recibo de luz</small>
-                                </div>
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="card results-card">
+                    <h2><i class="fas fa-chart-bar"></i> Resultados del Cálculo</h2>
+
+                    <div class="results-grid">
+                        Resultados principales
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-bolt"></i></div>
+                            <div class="result-content">
+                                <h3>Consumo Anual</h3>
+                                <p id="consumoAnual">-</p>
                             </div>
                         </div>
-                        <div class="opcion-consumo" id="opcion-kwh">
-                            <div class="tab-header">Consumo en kWh</div>
-                            <div class="tab-content">
-                                <div class="grupo-formulario">
-                                    <label for="consumo-kwh">¿Cuál es tu consumo bimestral en kWh?</label>
-                                    <input type="number" id="consumo-kwh" placeholder="Ej: 250" min="50">
-                                    <div class="ayuda-tooltip">
-                                        <i class="fas fa-question-circle"></i>
-                                        <span class="tooltip-text">Puedes encontrar este dato en la sección de "Historial de consumo" de tu recibo</span>
-                                    </div>
-                                    <small>Si conoces tu consumo en kilowatts-hora, ingrésalo aquí</small>
-                                </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-calendar-day"></i></div>
+                            <div class="result-content">
+                                <h3>Consumo Diario</h3>
+                                <p id="consumoDiario">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div class="result-content">
+                                <h3>Consumo Mensual</h3>
+                                <p id="consumoMensual">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-chart-bar"></i></div>
+                            <div class="result-content">
+                                <h3>Promedio Mensual</h3>
+                                <p id="promedioConsumo">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-sun"></i></div>
+                            <div class="result-content">
+                                <h3>Horas Solares Pico</h3>
+                                <p id="hsp">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-lightning-bolt"></i></div>
+                            <div class="result-content">
+                                <h3>Potencia Fotovoltaica</h3>
+                                <p id="potenciaFotovoltaica">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-solar-panel"></i></div>
+                            <div class="result-content">
+                                <h3>Número de Módulos</h3>
+                                <p id="numeroModulos">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-plug"></i></div>
+                            <div class="result-content">
+                                <h3>Potencia Instalada</h3>
+                                <p id="potenciaInstalada">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                            <div class="result-content">
+                                <h3>Área Requerida</h3>
+                                <p id="areaRequerida">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-industry"></i></div>
+                            <div class="result-content">
+                                <h3>Generación Anual</h3>
+                                <p id="generacionAnual">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-weight-hanging"></i></div>
+                            <div class="result-content">
+                                <h3>Peso Total Paneles</h3>
+                                <p id="pesoTotalPaneles">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-balance-scale"></i></div>
+                            <div class="result-content">
+                                <h3>Peso por m²</h3>
+                                <p id="pesoPorM2">-</p>
+                            </div>
+                        </div>
+
+                        <!-- <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-tools"></i></div>
+                            <div class="result-content">
+                                <h3>Peso Estructura</h3>
+                                <p id="pesoEstructura">-</p>
+                            </div>
+                        </div> -->
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-weight"></i></div>
+                            <div class="result-content">
+                                <h3>Peso Total Sistema</h3>
+                                <p id="pesoTotalSistema">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-microchip"></i></div>
+                            <div class="result-content">
+                                <h3>Inversores Recomendados</h3>
+                                <p id="numeroInversores">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-leaf"></i></div>
+                            <div class="result-content">
+                                <h3>Ahorro CO₂</h3>
+                                <p id="ahorroCO2">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-tree"></i></div>
+                            <div class="result-content">
+                                <h3>Árboles Equivalentes</h3>
+                                <p id="arbolesPlantados">-</p>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="result-content">
+                                <h3>Producción Promedio</h3>
+                                <p id="promedioProduccion">-</p>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="botones-navegacion">
-                        <button class="boton-anterior" id="anterior-3"><i class="fas fa-arrow-left"></i> Anterior</button>
-                        <button class="boton-calcular" id="calcular">Calcular mi ahorro <i class="fas fa-calculator"></i></button>
+
+                    <!-- <div class="card">
+                        <h2><i class="fas fa-sun"></i> Irradiación Solar Anual</h2>
+                        <div id="irradiacionChart" class="custom-chart"></div>
                     </div>
+
+                    <div class="card">
+                        <h2><i class="fas fa-chart-line"></i> Balance Energético Mensual</h2>
+                        <div id="produccionChart" class="custom-chart"></div>
+                    </div> -->
+
+                    Nueva tabla para el detalle mensual
+                    <div class="card">
+                        <h2><i class="fas fa-table"></i> Detalle Mensual</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mes</th>
+                                        <th>Irradiación (kWh/m²/día)</th>
+                                        <th>Producción (kWh)</th>
+                                        <th>Consumo (kWh)</th>
+                                        <th>Balance (kWh)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detalleTableBody">
+                                    Las filas se insertarán dinámicamente aquí
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    Nuevo botón para exportar a PDF
+                    <button class="calculate-btn" onclick="exportResultsToPdf()">
+                        <i class="fas fa-file-pdf"></i>
+                        Exportar Resultados a PDF
+                    </button>
+
                 </div>
             </div>
         </div>
 
-        <div class="resultados-container oculto" id="resultados-container">
-            <h2>Tus resultados</h2>
-            <div class="tarjetas-resultados">
-                <div class="tarjeta-resultado">
-                    <div class="icono-resultado">
-                        <i class="fas fa-piggy-bank"></i>
-                    </div>
-                    <h3>Ahorro estimado durante el 1er año</h3>
-                    <p id="ahorro-primer-anio">$0.00 MXN</p>
-                </div>
-                
-                <div class="tarjeta-resultado">
-                    <div class="icono-resultado">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Ahorro total en 25 años</h3>
-                    <p id="ahorro-vida-util">$0.00 MXN</p>
-                </div>
-                
-                <div class="tarjeta-resultado">
-                    <div class="icono-resultado">
-                        <i class="fas fa-hourglass-half"></i>
-                    </div>
-                    <h3>Recuperas tu inversión en</h3>
-                    <p id="retorno-inversion">0 años</p>
-                </div>
-            </div>
-            
-            <div class="detalles-sistema">
-                <h3>Sistema solar recomendado</h3>
-                <div class="detalles-grid">
-                    <div class="detalle">
-                        <span class="etiqueta">Capacidad del sistema:</span>
-                        <span class="valor" id="capacidad-sistema">0 kW</span>
-                    </div>
-                    <div class="detalle">
-                        <span class="etiqueta">Número de paneles:</span>
-                        <span class="valor" id="numero-paneles">0</span>
-                    </div>
-                    <div class="detalle">
-                        <span class="etiqueta">Inversión aproximada:</span>
-                        <span class="valor" id="inversion-aproximada">$0.00 MXN</span>
-                    </div>
-                    <div class="detalle">
-                        <span class="etiqueta">Reducción de CO₂:</span>
-                        <span class="valor" id="reduccion-co2">0 toneladas</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="acciones-resultados">
-                <button class="boton-recalcular" id="recalcular"><i class="fas fa-redo"></i> Recalcular</button>
-                <button class="boton-contacto" id="contacto">Solicitar cotización <i class="fas fa-file-invoice"></i></button>
+        <div class="loading" id="loading" style="display: none;">
+            <div class="loading-content">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Consultando datos de irradiación solar...</p>
             </div>
         </div>
-
-        <div class="seccion-info">
-            <h2>¿Por qué instalar paneles solares?</h2>
-            <div class="beneficios">
-                <div class="beneficio">
-                    <i class="fas fa-dollar-sign icono-beneficio"></i>
-                    <h3>Ahorro inmediato</h3>
-                    <p>Reduce tu recibo de luz desde el primer mes y protégete contra futuros aumentos de CFE.</p>
-                </div>
-                <div class="beneficio">
-                    <i class="fas fa-leaf icono-beneficio"></i>
-                    <h3>Cuida el planeta</h3>
-                    <p>Reduce tu huella de carbono y contribuye a un México más sostenible.</p>
-                </div>
-                <div class="beneficio">
-                    <i class="fas fa-bolt icono-beneficio"></i>
-                    <h3>Independencia energética</h3>
-                    <p>Genera tu propia electricidad y olvídate de los cortes de luz.</p>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            <p>© 2025 Calculadora de Ahorro con Paneles Solares | HEXA</p>
-        </footer>
     </div>
 
-    <script src="script.js"></script>
-    <!-- ...existing code... -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- ...existing code... -->
+    <script src="script2.js"></script>
 </body>
+
 </html>
